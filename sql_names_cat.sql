@@ -29,7 +29,6 @@ GROUP by name, year
 ORDER BY SUM(num_registered) DESC;
 
 
-
 -- 4 What range of years are included?
 -- 1880 through 2018
 SELECT MAX(year)
@@ -39,19 +38,54 @@ SELECT MIN(year)
 FROM names;
 
 
+-- 5 What year has the largest number of registrations?
+-- 1957 with 4,200,022
+SELECT year, SUM(num_registered) 
+FROM names
+GROUP BY year
+ORDER BY SUM(num_registered) DESC;
 
--- What year has the largest number of registrations?
+-- 6 How many different (distinct) names are contained in the dataset?
+-- There are 98,400 distinct or unique names in the dataset.
+SELECT COUNT(DISTINCT name)
+FROM names;
 
+-- 7 Are there more males or more females registered?
+-- F -> 1,156,527 and M -> 800,519
+SELECT gender, COUNT(gender) AS num_of_gender
+FROM names
+GROUP BY gender;
+
+-- 8 What are the most popular male and female names overall (i.e., the most total registrations)?
+-- JAMES at 5,164,280 registered and MARY at 4,125,675
+SELECT DISTINCT(name), gender, SUM(num_registered) AS num_of_registered_in_gender
+FROM names
+GROUP BY gender, name
+ORDER BY SUM(num_registered) DESC
+LIMIT 5;
+
+
+-- SELECT 
+-- 	DISTINCT(name), 
+-- 	gender
+-- FROM 	
+-- 	names
+-- WHERE 
+-- 	num_registered =(
+-- 	SELECT MAX(num_registered)
+-- 	FROM names
+-- )
+-- GROUP BY 
+-- 	gender, 
+-- 	name
+-- LIMIT 1;
+
+
+
+-- What are the most popular boy and girl names of the first decade of the 2000s (2000 - 2009)?
 SELECT * 
 FROM names;
 
--- How many different (distinct) names are contained in the dataset?
-
--- Are there more males or more females registered?
-
--- What are the most popular male and female names overall (i.e., the most total registrations)?
-
--- What are the most popular boy and girl names of the first decade of the 2000s (2000 - 2009)?
 
 -- Which year had the most variety in names (i.e. had the most distinct names)?
 
