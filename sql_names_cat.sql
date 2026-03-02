@@ -65,46 +65,71 @@ ORDER BY SUM(num_registered) DESC
 LIMIT 5;
 
 
--- SELECT 
--- 	DISTINCT(name), 
--- 	gender
--- FROM 	
--- 	names
--- WHERE 
--- 	num_registered =(
--- 	SELECT MAX(num_registered)
--- 	FROM names
--- )
--- GROUP BY 
--- 	gender, 
--- 	name
--- LIMIT 1;
+-- 9 What are the most popular boy and girl names of the first decade of the 2000s (2000 - 2009)?
+-- Jacob and Emily 
+
+SELECT gender, name, year, SUM(num_registered) 
+FROM names
+WHERE year BETWEEN 2000 AND 2009 AND gender LIKE '%M%'
+GROUP BY gender, name, year, num_registered
+ORDER BY SUM(num_registered) DESC
+LIMIT 1;
+
+SELECT gender, name, year, MAX(num_registered) 
+FROM names
+WHERE year BETWEEN 2000 AND 2009 AND gender LIKE '%F%'
+GROUP BY gender, name, year, num_registered
+ORDER BY MAX(num_registered) DESC
+LIMIT 1;
 
 
+-- 10 Which year had the most variety in names (i.e. had the most distinct names)?
+-- 2008	with 32,518 distinct names
+SELECT year, COUNT(DISTINCT name)
+FROM names
+GROUP BY year
+ORDER BY COUNT(DISTINCT name) DESC;
 
--- What are the most popular boy and girl names of the first decade of the 2000s (2000 - 2009)?
+-- 11 What is the most popular name for a girl that starts with the letter X?
+-- It was "Ximena" at 26,145
+SELECT name, gender, SUM(num_registered) AS num_of_name
+FROM names
+GROUP BY name, gender
+HAVING name LIKE 'X%' AND gender LIKE 'F%'
+ORDER BY SUM(num_registered) DESC;
+
+
+-- 12 Write a query to find all (distinct) names that start with a 'Q' but whose second letter is not 'u'.
+-- There are 46 distinct names that begin with "Q" but do not have a "u" as their second letter.
+SELECT COUNT(DISTINCT name)
+FROM names
+WHERE name LIKE 'Q%'
+  AND name NOT LIKE '_u%'
+
+SELECT DISTINCT(name)
+FROM names
+WHERE name LIKE 'Q%'
+  AND name NOT LIKE '_u%'
+
+
+-- 13 Which is the more popular spelling between "Stephen" and "Steven"? Use a single query to answer this question.
+-- 
 SELECT * 
 FROM names;
 
+-- 14 Find all names that are "unisex" - that is all names that have been used both for boys and for girls.
 
--- Which year had the most variety in names (i.e. had the most distinct names)?
+-- 15 Find all names that have made an appearance in every single year since 1880.
 
--- What is the most popular name for a girl that starts with the letter X?
+-- 16 Find all names that have only appeared in one year.
 
--- Write a query to find all (distinct) names that start with a 'Q' but whose second letter is not 'u'.
+-- 17 Find all names that only appeared in the 1950s.
 
--- Which is the more popular spelling between "Stephen" and "Steven"? Use a single query to answer this question.
+-- 18 Find all names that made their first appearance in the 2010s.
 
--- Find all names that are "unisex" - that is all names that have been used both for boys and for girls.
+-- 19 Find the names that have not be used in the longest.
 
--- Find all names that have made an appearance in every single year since 1880.
+-- 20 Come up with a question that you would like to answer using this dataset. Then write a query to answer this question.
+-- 
 
--- Find all names that have only appeared in one year.
 
--- Find all names that only appeared in the 1950s.
-
--- Find all names that made their first appearance in the 2010s.
-
--- Find the names that have not be used in the longest.
-
--- Come up with a question that you would like to answer using this dataset. Then write a query to answer this question.
