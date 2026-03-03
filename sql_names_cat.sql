@@ -148,28 +148,47 @@ HAVING COUNT(DISTINCT year) = 1;
 
 
 -- 17 Find all names that only appeared in the 1950s.
--- There were 17,007 unique names but the names that only appeared in the 1950s were: 
--- SELECT DISTINCT(name) 
--- FROM names
--- WHERE year BETWEEN 1950 AND 1959
--- GROUP BY DISTINCT(name);
+-- There were 661 unique names but the names that only appeared in the 1950s were: 
+SELECT name
+FROM names
+WHERE year BETWEEN 1950 AND 1959 
+EXCEPT
+SELECT name
+FROM names
+WHERE year BETWEEN 1880 AND 1949 OR year BETWEEN 1960 AND 2018;
 
 
 -- 18 Find all names that made their first appearance in the 2010s.
--- 
--- SELECT DISTINCT(name), MAX(year)
--- FROM names
--- WHERE year BETWEEN 2010 AND 2018
--- GROUP BY DISTINCT(name);
-
--- SELECT * 
--- FROM names;
+-- There were 11,270 names
+SELECT DISTINCT(name)
+FROM names
+WHERE year BETWEEN 2010 AND 2018
+GROUP BY DISTINCT(name)
+EXCEPT
+SELECT DISTINCT(name)
+FROM names
+WHERE year BETWEEN 1880 AND 2009;
 
 
 -- 19 Find the names that have not be used in the longest.
--- 
+-- There are 98,400 names in the list
+SELECT name, MAX(year) 
+FROM names
+GROUP BY name
+ORDER by MAX(year)
+
 
 -- 20 Come up with a question that you would like to answer using this dataset. Then write a query to answer this question.
--- 
+-- Find all unique names that only appeared in 1986
+-- There were 201 unique names in 1986
+
+SELECT DISTINCT(name)
+FROM names
+WHERE year = 1986 
+EXCEPT
+SELECT DISTINCT(name)
+FROM names
+WHERE year BETWEEN 1880 AND 1985 OR year BETWEEN 1987 AND 2018
+ORDER by name;
 
 
