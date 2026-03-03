@@ -66,20 +66,20 @@ LIMIT 5;
 
 
 -- 9 What are the most popular boy and girl names of the first decade of the 2000s (2000 - 2009)?
--- Jacob and Emily 
+-- Jacob 34,477 and Emily 25,956
 
-SELECT gender, name, year, SUM(num_registered) 
+SELECT gender, name, SUM(num_registered) 
 FROM names
 WHERE year BETWEEN 2000 AND 2009 AND gender LIKE '%M%'
-GROUP BY gender, name, year, num_registered
+GROUP BY gender, name, num_registered
 ORDER BY SUM(num_registered) DESC
 LIMIT 1;
 
-SELECT gender, name, year, MAX(num_registered) 
+SELECT gender, name, SUM(num_registered) 
 FROM names
 WHERE year BETWEEN 2000 AND 2009 AND gender LIKE '%F%'
-GROUP BY gender, name, year, num_registered
-ORDER BY MAX(num_registered) DESC
+GROUP BY gender, name, num_registered
+ORDER BY SUM(num_registered) DESC
 LIMIT 1;
 
 
@@ -113,21 +113,61 @@ WHERE name LIKE 'Q%'
 
 
 -- 13 Which is the more popular spelling between "Stephen" and "Steven"? Use a single query to answer this question.
--- 
-SELECT * 
-FROM names;
+-- It appears that "Steven" at 1,286,951 is more common than "Stephen"	at 860,972.
+SELECT name, SUM(num_registered)
+FROM names
+WHERE name LIKE 'Stephen' OR name LIKE 'Steven'
+GROUP BY name
+ORDER BY SUM(num_registered) DESC;
+
 
 -- 14 Find all names that are "unisex" - that is all names that have been used both for boys and for girls.
+-- It appears there are 10,773 names on the list.
+
+SELECT name, COUNT(DISTINCT gender) AS num_of_genders
+FROM names
+GROUP BY name
+HAVING COUNT(DISTINCT gender) > 1;
+
 
 -- 15 Find all names that have made an appearance in every single year since 1880.
+-- There 921
+
+SELECT name, COUNT(DISTINCT year)
+FROM names
+GROUP BY name
+HAVING COUNT(DISTINCT year) = 139;
+
 
 -- 16 Find all names that have only appeared in one year.
+-- There were 21,123 names
+SELECT name, COUNT(DISTINCT year)
+FROM names
+GROUP BY name
+HAVING COUNT(DISTINCT year) = 1;
+
 
 -- 17 Find all names that only appeared in the 1950s.
+-- There were 17,007 unique names but the names that only appeared in the 1950s were: 
+-- SELECT DISTINCT(name) 
+-- FROM names
+-- WHERE year BETWEEN 1950 AND 1959
+-- GROUP BY DISTINCT(name);
+
 
 -- 18 Find all names that made their first appearance in the 2010s.
+-- 
+-- SELECT DISTINCT(name), MAX(year)
+-- FROM names
+-- WHERE year BETWEEN 2010 AND 2018
+-- GROUP BY DISTINCT(name);
+
+-- SELECT * 
+-- FROM names;
+
 
 -- 19 Find the names that have not be used in the longest.
+-- 
 
 -- 20 Come up with a question that you would like to answer using this dataset. Then write a query to answer this question.
 -- 
