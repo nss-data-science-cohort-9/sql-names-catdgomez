@@ -13,28 +13,32 @@ LIMIT 5;
 -- there are 1,957,046 rows are in the names table
 SELECT COUNT(*)
 FROM names;
+-- This is a small enough table to do this, though this: is not a great idea in some cases with larger tables
+-- SELECT *
+-- FROM names;
+
 
 -- 2 How many total registered people appear in the dataset?
 -- 351,653,025 is the total number of registered people in the dataset
 SELECT SUM(num_registered) AS Registered_People
-FROM names
-ORDER BY SUM(num_registered) DESC;
+FROM names;
+
+-- not this: from JOSH
+-- SELECT COUNT(DISTINCT name)
+-- FROM names;
 
 
 -- 3 Which name had the most appearances in a single year in the dataset?
--- Linda in 1947 at 99,905
-SELECT name, year, SUM(num_registered) AS Registered_People
+-- Linda in 1947 at 99,689
+SELECT name, year, num_registered 
 FROM names
-GROUP by name, year
-ORDER BY SUM(num_registered) DESC;
+ORDER BY num_registered DESC
+LIMIT 1;
 
 
 -- 4 What range of years are included?
 -- 1880 through 2018
-SELECT MAX(year)
-FROM names;
-
-SELECT MIN(year)
+SELECT MAX(year), MIN(year)
 FROM names;
 
 
