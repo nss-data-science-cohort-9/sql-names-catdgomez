@@ -139,6 +139,34 @@ GROUP BY gender, name, num_registered
 ORDER BY SUM(num_registered) DESC
 LIMIT 1;
 
+-- This was from JOSH
+SELECT 
+ gender,
+ name,
+ SUM(num_registered) as total_registered
+FROM names 
+WHERE year BETWEEN 2000 AND 2009 AND gender = 'M'
+GROUP BY
+ name,
+ gender
+ORDER BY total_registered DESC
+LIMIT 1;
+-- Jacob is the top for Male
+
+
+SELECT 
+ gender,
+ name,
+ SUM(num_registered) as total_registered
+FROM names 
+WHERE year BETWEEN 2000 AND 2009 AND gender = 'F'
+GROUP BY
+ name,
+ gender
+ORDER BY total_registered DESC
+LIMIT 1;
+--Emily is the top for Female
+
 
 -- 10 Which year had the most variety in names (i.e. had the most distinct names)?
 -- 2008	with 32,518 distinct names
@@ -147,6 +175,7 @@ FROM names
 GROUP BY year
 ORDER BY COUNT(DISTINCT name) DESC;
 
+
 -- 11 What is the most popular name for a girl that starts with the letter X?
 -- It was "Ximena" at 26,145
 SELECT name, gender, SUM(num_registered) AS num_of_name
@@ -154,6 +183,13 @@ FROM names
 GROUP BY name, gender
 HAVING name LIKE 'X%' AND gender LIKE 'F%'
 ORDER BY SUM(num_registered) DESC;
+
+-- This was from Sarah Mulloy
+SELECT SUM(num_registered) as total_name, name
+FROM public.names
+WHERE gender = 'F' and name LIKE'X%'
+GROUP BY name
+ORDER BY total_name DESC;
 
 
 -- 12 Write a query to find all (distinct) names that start with a 'Q' but whose second letter is not 'u'.
@@ -167,6 +203,13 @@ SELECT DISTINCT(name)
 FROM names
 WHERE name LIKE 'Q%'
   AND name NOT LIKE '_u%'
+
+-- From Josh
+SELECT 
+ DISTINCT name
+FROM names 
+WHERE name LIKE 'Q%'
+ AND substring(name, 2, 1) <> 'u';
 
 
 -- 13 Which is the more popular spelling between "Stephen" and "Steven"? Use a single query to answer this question.
