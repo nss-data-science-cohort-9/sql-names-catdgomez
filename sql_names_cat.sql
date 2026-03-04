@@ -216,15 +216,27 @@ WHERE name LIKE 'Q%'
 -- It appears that "Steven" at 1,286,951 is more common than "Stephen"	at 860,972.
 SELECT name, SUM(num_registered)
 FROM names
-WHERE name LIKE 'Stephen' OR name LIKE 'Steven'
+WHERE name = 'Stephen' OR name = 'Steven'
+GROUP BY name
+ORDER BY SUM(num_registered) DESC;
+
+-- FROM Grant Alan
+SELECT name, SUM(num_registered)
+FROM names
+WHERE name IN ('Stephen', 'Steven')
 GROUP BY name
 ORDER BY SUM(num_registered) DESC;
 
 
 -- 14 Find all names that are "unisex" - that is all names that have been used both for boys and for girls.
 -- It appears there are 10,773 names on the list.
-
 SELECT name, COUNT(DISTINCT gender) AS num_of_genders
+FROM names
+GROUP BY name
+HAVING COUNT(DISTINCT gender) > 1;
+
+-- From Abigail
+SELECT name
 FROM names
 GROUP BY name
 HAVING COUNT(DISTINCT gender) > 1;
@@ -232,11 +244,27 @@ HAVING COUNT(DISTINCT gender) > 1;
 
 -- 15 Find all names that have made an appearance in every single year since 1880.
 -- There 921
-
 SELECT name, COUNT(DISTINCT year)
 FROM names
 GROUP BY name
 HAVING COUNT(DISTINCT year) = 139;
+
+-- FROM Shannon Lee
+SELECT name
+FROM names
+GROUP BY name
+HAVING COUNT(DISTINCT year) > 2018 - 1880
+ORDER BY name;
+
+-- FROM Josh Tacker
+SELECT name
+ FROM names
+GROUP BY name 
+HAVING count(DISTINCT year) = 
+(
+SELECT count(DISTINCT year)
+ FROM names
+ );
 
 
 -- 16 Find all names that have only appeared in one year.
@@ -245,6 +273,21 @@ SELECT name, COUNT(DISTINCT year)
 FROM names
 GROUP BY name
 HAVING COUNT(DISTINCT year) = 1;
+
+-- From Sarah Mulloy
+SELECT name
+FROM public.names
+GROUP BY name
+HAVING COUNT(DISTINCT year) = 1;
+
+-- FROM Shannon Lee
+SELECT name, gender
+FROM names
+WHERE name IN (SELECT name
+FROM names
+GROUP BY name
+HAVING COUNT(DISTINCT year) = 1
+ORDER BY name);
 
 
 -- 17 Find all names that only appeared in the 1950s.
