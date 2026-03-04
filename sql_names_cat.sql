@@ -49,6 +49,7 @@ FROM names
 GROUP BY year
 ORDER BY SUM(num_registered) DESC;
 
+
 -- 6 How many different (distinct) names are contained in the dataset?
 -- There are 98,400 distinct or unique names in the dataset.
 SELECT COUNT(DISTINCT name)
@@ -56,17 +57,69 @@ FROM names;
 
 -- 7 Are there more males or more females registered?
 -- F -> 1,156,527 and M -> 800,519
-SELECT gender, COUNT(gender) AS num_of_gender
+-- This was wrong:
+-- SELECT gender, COUNT(gender) AS num_of_gender
+-- FROM names
+-- GROUP BY gender;
+
+-- THIS WAS CORRECT FROM ABIGAIL
+SELECT gender, SUM(num_registered) as totalreg
 FROM names
-GROUP BY gender;
+GROUP BY gender
+ORDER BY totalreg DESC
+LIMIT 2;
+
 
 -- 8 What are the most popular male and female names overall (i.e., the most total registrations)?
 -- JAMES at 5,164,280 registered and MARY at 4,125,675
-SELECT DISTINCT(name), gender, SUM(num_registered) AS num_of_registered_in_gender
+SELECT name, gender, SUM(num_registered) AS num_of_registered_in_gender
 FROM names
 GROUP BY gender, name
 ORDER BY SUM(num_registered) DESC
 LIMIT 5;
+
+-- This was from Shannon
+SELECT name, SUM(num_registered) AS total_registered
+FROM names
+WHERE gender='F'
+GROUP BY name
+ORDER BY total_registered DESC
+LIMIT 1;
+
+SELECT name, SUM(num_registered) AS total_registered
+FROM names
+WHERE gender='M'
+GROUP BY name
+ORDER BY total_registered DESC
+LIMIT 1;
+
+-- This one was from ANITHA
+SELECT DISTINCT ON (gender) gender, name, SUM(num_registered) as total_registered   --DISTINCT ON picks TOP name per gender
+FROM names
+GROUP BY name, gender
+ORDER BY gender, total_registered DESC
+
+-- This was from JOSH
+WITH RankedNames AS (
+ SELECT 
+  gender,
+  name,
+  SUM(num_registered) as total_registered,
+  RANK() OVER (PARTITION BY gender ORDER BY SUM(num_registered) DESC) as rn
+ FROM
+  names 
+ GROUP BY
+  gender,
+  name
+)
+SELECT
+ gender,
+ name,
+ total_registered
+FROM
+ RankedNames
+WHERE
+ rn = 1;
 
 
 -- 9 What are the most popular boy and girl names of the first decade of the 2000s (2000 - 2009)?
